@@ -1,4 +1,3 @@
-
 #  MLFLOW database Migration
 
 1. You have started Mlflow with a postgres database you want to upgrade
