@@ -8,7 +8,7 @@
 kubectl get pods | grep mlflow
 ```
 4. Retrieve the database name, username and password for connection.  
-One way to do this is by checking the description of the Mlflow pod and retrieving the backend store URI. It looks like this : `postgresql://[username]:[password]@[host]:/[database]`  
+One way to do this is by checking the description of the Mlflow pod and retrieving the backend store URI. It looks like this : `postgresql://[username]:[password]@[host]:[port]/[database]`  
 ```bash
 kubectl describe pod mlflow-xxxx-xxx-xx | grep -i backend-store-uri   
 ```
@@ -26,10 +26,11 @@ kubectl cp [namespace]/mlflow-db-0:tmp/dump.backup dump.backup
 ```bash
 helm ls  
 helm uninstall mlflow-xxxxx  
+kubectl get pvc    
 kubectl delete pvc data-mlflow-db-0  
 ```  
 9. Start a new mlflow instance with the upgraded version of postgres
-10. Restore the data 
+10. Restore the data - refer to step 4 if you do not know your connection credentials
 ``` bash
 kubectl cp dump.backup [namespace]/mlflow-db-0:/tmp/dump.backup  
 kubectl exec -it mlflow-db-0 -- pg_restore -h mlflow-db -p 5432 -d mlflow -U [username] -v tmp/dump.backup
